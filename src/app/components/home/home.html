@@ -1,0 +1,21 @@
+
+<div class="sidebar">
+    <div class="sidebar-wrapper">
+        <ul>
+            <li *ngFor="#folder of folders"><a (click)=selectFolder(folder)>{{folder}}</a></li>
+        </ul>
+
+        <div class="badget" move styleclass="sidebar">
+            Ordner
+        </div>
+    </div>
+</div>
+
+<fieldset>
+    <legend>{{currentFolder}}</legend>
+    <div class="col-md-4 canvas-holder" *ngFor="#file of files;#i=index">
+        <span class="title">{{file | filename}}</span>
+        <hr class="para"/>
+         <canvas bind-id="i" width="180px" height="260px" (click)=load(file)></canvas>
+    </div>
+</fieldset>
