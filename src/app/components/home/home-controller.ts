@@ -1,7 +1,7 @@
 import {Component} from 'angular2/core';
 import {ROUTER_DIRECTIVES, Router} from 'angular2/router';
 import {PDFReader} from '../../services/pdf-reader'
-import {FileService, Topic} from '../../services/file-service-mock'
+import {FileService, Topic} from '../../services/file-service'
 import {MoveClickDirective} from '../../directives/moveclick'
 import {TopicSearch} from '../../directives/topic-search'
 import {ExtractFileName} from '../../pipes/extract-filename'

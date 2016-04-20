@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter} from 'angular2/core'
-import {FileService, Topic} from '../services/file-service-mock'
+import {FileService, Topic} from '../services/file-service'
 
 @Component({
     template:  `<form (submit)='search()'><div class='col-md-8'> <input class="form-control" [(ngModel)]='searchterm' /></div><div class='col-md-4'><button class='btn btn-primary' type='submit'>suche</button></div></form>`,

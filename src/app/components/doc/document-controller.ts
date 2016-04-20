@@ -3,7 +3,7 @@ import {RouteParams, Router, ROUTER_DIRECTIVES} from 'angular2/router'
 import {PDFReader} from '../../services/pdf-reader'
 import {NavigationService} from '../../services/navigation-service'
 
-import {FileService, Topic} from '../../services/file-service-mock'
+import {FileService, Topic} from '../../services/file-service'
 
 @Component({
     templateUrl: 'app/components/doc/doc.html',
