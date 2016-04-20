@@ -12,10 +12,15 @@
 </div>
 
 <fieldset>
-    <legend>{{currentFolder}}</legend>
-    <div class="col-md-4 canvas-holder" *ngFor="#file of files;#i=index">
-        <span class="title">{{file | filename}}</span>
+
+    <div class="row">
+        <div class="col-md-8"><h3>{{currentFolder}}</h3></div>
+        <div class="col-md-4"><bo-topic-search folder="{{currentFolder}}" (onResult)="showTopics($event)"></bo-topic-search></div>
+    </div>
+
+    <div class="col-md-4 canvas-holder" *ngFor="#topic of files;#i=index">
+         <span class="title">{{topic.file | filename}} <p *ngIf="topic.page!=1">{{topic.topic}}, Seite: {{topic.page}}</p></span>
         <hr class="para"/>
-         <canvas bind-id="i" width="180px" height="260px" (click)=load(file)></canvas>
+        <canvas bind-id="i" width="180px" height="260px" (click)=load(topic)></canvas>
     </div>
 </fieldset>

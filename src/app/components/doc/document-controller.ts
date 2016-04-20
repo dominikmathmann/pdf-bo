@@ -13,6 +13,8 @@ import {FileService, Topic} from '../../services/file-service-mock'
 export class DocumentController {
     constructor(public router: Router, navigationService: NavigationService, private _params: RouteParams, private _filesService: FileService, private _pdfReader: PDFReader) {
         this.pdf = decodeURIComponent(_params.get("pdf"));
+        this.currentPage = +_params.get("page");
+        if (!this.currentPage) this.currentPage=1;
         navigationService.getBackEvent().subscribe((v:string) => {
             router.navigate(['Home'])
         });
@@ -20,7 +22,7 @@ export class DocumentController {
 
     ngOnInit() {
         this._filesService.readInfos(this.pdf).subscribe(r => this.topics = r)
-        this.preview(1);
+        this.preview(this.currentPage);
 
     }
     

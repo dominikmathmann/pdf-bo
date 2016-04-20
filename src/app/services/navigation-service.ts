@@ -21,7 +21,5 @@ export class NavigationService {
         console.log("BACK");
         this.backEvent.emit('');
     }
-    
-    
 }
 

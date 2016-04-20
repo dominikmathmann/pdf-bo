@@ -19,7 +19,7 @@
         </center>
     </app>
     <script>
-        if (require) {
+        if (typeof require !== 'undefined') {
             window.$ = window.jQuery = require('./app/assets/js/jquery.min.js');
             window.fs = require('fs');
             console.log(fs);
