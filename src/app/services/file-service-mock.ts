@@ -6,7 +6,7 @@ import 'rxjs/add/operator/concat'
 
 
 @Injectable()
-export class FileService {
+export class FileServiceMock {
 
     constructor(private _http: Http) { }
 

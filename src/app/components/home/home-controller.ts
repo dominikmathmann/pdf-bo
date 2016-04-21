@@ -21,7 +21,7 @@ export class Home {
     
     folders: string[]
 
-    currentFolder="Klasse 5"
+    currentFolder:string;
     
     selectFolder(folder){
         this.currentFolder=folder;
@@ -37,7 +37,7 @@ export class Home {
     }
     
     renderDocs(){
-          this.files.forEach((f, index) => this._pdfReader.readPDF(f.file, index + "", f.page));
+          this.files.forEach((f, index) => this._pdfReader.readPDF(this._fileService.getFullPath(f.file), index + "", f.page));
     }
     
     showTopics(topics:Topic[]){
@@ -48,12 +48,13 @@ export class Home {
     readFolders() {
         this._fileService.readFolders().subscribe(r => {
             this.folders = r;
+            this.currentFolder=this.folders[0]
+            this.readFiles();
         });
     }
 
     ngOnInit() {
         this.readFolders();
-        this.readFiles();
     }
 
     load(topic) {

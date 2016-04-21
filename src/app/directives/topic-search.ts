@@ -17,7 +17,7 @@ export class TopicSearch {
     onResult: EventEmitter<Topic[]> = new EventEmitter();
     
     search(){
-        this._fileService.search(this.folder, this.searchterm).then(t => this.onResult.emit(t));
+        this._fileService.search(this.folder, this.searchterm).subscribe(t => this.onResult.emit(t));
     }
 }
 

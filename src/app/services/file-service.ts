@@ -11,27 +11,46 @@ import 'rxjs/add/operator/concat'
 @Injectable()
 export class FileService {
 
-    constructor(private _http: Http) { }
+    rootFolder = "dokumente";
+    
+    constructor(private _http: Http) { 
+        this.rootFolder=path.resolve('../dokumente');
+        console.log("Use Document Folder:" + this.rootFolder);
+    }
+    
+    public getFullPath(file){
+        return path.join(this.rootFolder, file);
+    }
 
-    rootFolder = "app/assets/pdf/";
 
-    public readPdfFiles(path: string): Observable<string[]> {
-        path = this.rootFolder + path;
-
+    public readPdfFiles(dir: string): Observable<string[]> {
         return Observable.create((observer: any) => {
-            let files = fs.readdirSync(path).filter(f => f.substr(f.lastIndexOf(".")) == '.pdf');
+            let files = fs.readdirSync(path.join(this.rootFolder,dir)).filter(f => f.substr(f.lastIndexOf(".")) == '.pdf').map(f => path.join(dir, f));
             observer.next(files);
             observer.complete();
         })
     }
+    
+    public fileExist(directory):boolean {  
+        try {
+          fs.statSync(directory);
+          return true;
+        } catch(e) {
+          return false;
+        }
+    }
 
     public readInfos(pdfFile: string): Observable<Topic[]> {
+        pdfFile=path.join(this.rootFolder, pdfFile);
         return Observable.create(observer => {
+            
             var topics = fs.readFileSync(pdfFile + ".txt").toString().split("\n")
                 .map(line => {
                     var splits = line.split("#");
                     return new Topic(+splits[0], splits[1], pdfFile);
                 })
+ 
+
 
             observer.next(topics);
             observer.complete();
@@ -39,7 +58,8 @@ export class FileService {
         })
     }
 
-    public search(folder: string, searchterm: string): Promise<Topic[]> {
+    public search(folder: string, searchterm: string): Observable<Topic[]> {
+        console.log("SUCHE: " + folder);
         return Observable.create(observable => {
             let topics: Topic[] = [];
             this.readPdfFiles(folder).subscribe(files => {
@@ -60,20 +80,21 @@ export class FileService {
         })
     }
 
-    public readFolders(folder:string): Observable<string[]> {
+    public readFolders(folder=this.rootFolder): Observable<string[]> {
 
         return Observable.create((observer) => {
             let all = []
             let files: string[] = fs.readdirSync(folder);
             files = files.filter(f => fs.lstatSync(path.join(folder, f)).isDirectory())
-            all = all.concat(files.map(f => path.join(folder, f)));
 
-            files.forEach(dir => {
-                all = all.concat(this.readFolders(path.join(folder, dir)))
-            })
+//            files.forEach(dir => {
+//                this.readFolders(path.join(folder, dir), false).subscribe(f => {
+//                    all=all.concat(all, f);
+//                }
+//            })
 
-
-            observer.next(all);
+            console.log(files);
+            observer.next(files);
             observer.complete();
         });
 

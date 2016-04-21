@@ -32,7 +32,7 @@ export class DocumentController {
 
     preview(page: number) {
         this.currentPage = page;
-        this._pdfReader.readPDF(this.pdf, "doccanvas", page, 0.8)
+        this._pdfReader.readPDF(this._filesService.getFullPath(this.pdf), "doccanvas", page, 0.8)
     }
 
     nextPage() {
