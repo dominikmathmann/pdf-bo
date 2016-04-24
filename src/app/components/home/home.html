@@ -18,9 +18,11 @@
         <div class="col-md-4"><bo-topic-search folder="{{currentFolder}}" (onResult)="showTopics($event)"></bo-topic-search></div>
     </div>
 
+<div class="row">
     <div class="col-md-4 canvas-holder" *ngFor="#topic of files;#i=index">
          <span class="title">{{topic.file | filename}} <p *ngIf="topic.page!=1">{{topic.topic}}, Seite: {{topic.page}}</p></span>
         <hr class="para"/>
         <canvas bind-id="i" width="180px" height="260px" (click)=load(topic)></canvas>
     </div>
+</div>
 </fieldset>

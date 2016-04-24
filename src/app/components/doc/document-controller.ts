@@ -41,7 +41,7 @@ export class DocumentController {
     }
 
     previousPage() {
-        this.currentPage++;
+        this.currentPage--
         this.preview(this.currentPage);
 
     }

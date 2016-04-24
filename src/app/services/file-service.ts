@@ -3,6 +3,7 @@ import {Http, Response} from 'angular2/http';
 import {Observable}     from 'rxjs/Observable';
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/concat'
+import 'rxjs/add/operator/merge'
 
 //import * as fs from 'fs'
 //import * as path from 'path'
@@ -19,13 +20,14 @@ export class FileService {
     }
     
     public getFullPath(file){
-        return path.join(this.rootFolder, file);
+        if (file.indexOf(":")==-1) return path.join(this.rootFolder, file);
+        else return file;
     }
 
 
     public readPdfFiles(dir: string): Observable<string[]> {
         return Observable.create((observer: any) => {
-            let files = fs.readdirSync(path.join(this.rootFolder,dir)).filter(f => f.substr(f.lastIndexOf(".")) == '.pdf').map(f => path.join(dir, f));
+            let files = fs.readdirSync(this.getFullPath(dir)).filter(f => f.substr(f.lastIndexOf(".")) == '.pdf').map(f => path.join(dir, f));
             observer.next(files);
             observer.complete();
         })
@@ -33,15 +35,19 @@ export class FileService {
     
     public fileExist(directory):boolean {  
         try {
-          fs.statSync(directory);
-          return true;
+             fs.lstatSync(directory).isFile();
+             return true;
         } catch(e) {
           return false;
         }
     }
 
     public readInfos(pdfFile: string): Observable<Topic[]> {
-        pdfFile=path.join(this.rootFolder, pdfFile);
+        pdfFile=this.getFullPath(pdfFile)
+        if (!this.fileExist(pdfFile + ".txt")) {
+            fs.writeFile(pdfFile + ".txt", "1#Titel");
+        };
+
         return Observable.create(observer => {
             
             var topics = fs.readFileSync(pdfFile + ".txt").toString().split("\n")
@@ -60,18 +66,22 @@ export class FileService {
 
     public search(folder: string, searchterm: string): Observable<Topic[]> {
         console.log("SUCHE: " + folder);
+        var allTopics=[];
         return Observable.create(observable => {
             let topics: Topic[] = [];
             this.readPdfFiles(folder).subscribe(files => {
 
-                files
+                var t=files
                     .map(f => this.readInfos(f))
                     .reduce((prev, current) => {
-                        return prev === current ? current : prev.concat(current)
+                        return prev === current ? current : prev.merge(current)
                     })
-                    .subscribe((infos: Topic[]) => {
+
+                    t.subscribe((infos: Topic[]) => {
                         let matching = infos.filter(i => i.topic.toLowerCase().indexOf(searchterm.toLowerCase()) != -1);
-                        observable.next(topics.concat(matching));
+                       topics=topics.concat(matching);
+                    },()=>{},() => {
+                         observable.next(topics);
                         observable.complete();
                     })
             });
