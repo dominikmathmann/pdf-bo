@@ -4,7 +4,7 @@
     "target": "es5",
     "noImplicitAny": false,
     "outDir": "dist",
-    "rootDir": ".",
+    "rootDir": "src",
     "sourceMap": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,

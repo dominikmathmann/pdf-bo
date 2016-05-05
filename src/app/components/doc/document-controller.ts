@@ -7,7 +7,7 @@ import {FileService, Topic} from '../../services/file-service'
 
 @Component({
     templateUrl: 'app/components/doc/doc.html',
-    providers: [PDFReader,FileService],
+    providers: [PDFReader],
     directives: [ROUTER_DIRECTIVES]
 })
 export class DocumentController {
@@ -30,20 +30,28 @@ export class DocumentController {
         this.router.navigate(['PDF', { pdf: encodeURIComponent(this.pdf), page: this.currentPage}]);
     }
 
+    openResolution() {
+        this.router.navigate(['PDF', { pdf: encodeURIComponent(this.getResolutionPDF()), page: 0}]);
+    }
+
     preview(page: number) {
         this.currentPage = page;
         this._pdfReader.readPDF(this._filesService.getFullPath(this.pdf), "doccanvas", page, 0.8)
     }
 
     nextPage() {
-        this.currentPage++;
+        this.currentPage = this.currentPage + 1;
         this.preview(this.currentPage);
     }
 
     previousPage() {
-        this.currentPage--
+        this.currentPage = this.currentPage - 1; 
         this.preview(this.currentPage);
 
+    }
+
+    getResolutionPDF(){
+        return this._filesService.getResolutionPDF(this.pdf);
     }
 
     pdf: string;

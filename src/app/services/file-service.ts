@@ -13,6 +13,7 @@ import 'rxjs/add/operator/merge'
 export class FileService {
 
     rootFolder = "dokumente";
+    currentFolder;
     
     constructor(private _http: Http) { 
         this.rootFolder=path.resolve('../dokumente');
@@ -27,10 +28,16 @@ export class FileService {
 
     public readPdfFiles(dir: string): Observable<string[]> {
         return Observable.create((observer: any) => {
-            let files = fs.readdirSync(this.getFullPath(dir)).filter(f => f.substr(f.lastIndexOf(".")) == '.pdf').map(f => path.join(dir, f));
+            let files = fs.readdirSync(this.getFullPath(dir)).filter(f => f.substr(f.lastIndexOf(".")) == '.pdf').filter(f => f.indexOf("_lsg") == -1).map(f => path.join(dir, f));
             observer.next(files);
             observer.complete();
         })
+    }
+
+   public getResolutionPDF(pdfFile):string {  
+        pdfFile=this.getFullPath(pdfFile);
+        pdfFile=pdfFile.replace(".pdf", "_lsg.pdf");
+        return this.fileExist(pdfFile)?pdfFile:undefined;
     }
     
     public fileExist(directory):boolean {  
@@ -52,8 +59,14 @@ export class FileService {
             
             var topics = fs.readFileSync(pdfFile + ".txt").toString().split("\n")
                 .map(line => {
+                  if (line.indexOf("#")!=-1)
+                  {
                     var splits = line.split("#");
                     return new Topic(+splits[0], splits[1], pdfFile);
+                  }
+                  else {
+                      return new Topic(-1, line, pdfFile);
+                  }
                 })
  
 
@@ -88,6 +101,10 @@ export class FileService {
 
 
         })
+    }
+
+    public getCurrentFolder():string{
+        return this.currentFolder;
     }
 
     public readFolders(folder=this.rootFolder): Observable<string[]> {

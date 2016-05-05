@@ -6,7 +6,8 @@
   "scripts": {
     "start": "gulp clean && gulp",
     "package": "gulp clean && gulp package",
-    "electron": "electron main.js"
+    "electron": "electron main.js",
+    "electron-package" : "electron-packager . pdf-bo --platform=win32 --arch=all --ignore=node_modules"
   },
   "repository": {
     "type": "git",

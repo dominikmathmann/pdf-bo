@@ -10,7 +10,7 @@ import {ExtractFileName} from '../../pipes/extract-filename'
 @Component({
     selector: 'home',
     templateUrl: 'app/components/home/home.html',
-    providers: [PDFReader, FileService],
+    providers: [PDFReader],
     directives: [ROUTER_DIRECTIVES, MoveClickDirective, TopicSearch],
     pipes: [ExtractFileName]
 })
@@ -20,17 +20,15 @@ export class Home {
     files: Topic[]
     
     folders: string[]
-
-    currentFolder:string;
     
     selectFolder(folder){
-        this.currentFolder=folder;
+        this._fileService.currentFolder=folder;
         this.readFiles();
     }
     
     readFiles() {
         var context=this;
-        this._fileService.readPdfFiles(this.currentFolder).subscribe( (r) => {
+        this._fileService.readPdfFiles(this._fileService.currentFolder).subscribe( (r) => {
             context.files = r.map(s => new Topic(1, s, s));
             setTimeout(context.renderDocs.apply(context), 500);
         });
@@ -46,9 +44,10 @@ export class Home {
     }
     
     readFolders() {
-        this._fileService.readFolders().subscribe(r => {
+        this._fileService.readFolders( ).subscribe(r => {
             this.folders = r;
-            this.currentFolder=this.folders[0]
+            if (!this._fileService.currentFolder)
+                this._fileService.currentFolder=this.folders[0]
             this.readFiles();
         });
     }
@@ -59,5 +58,9 @@ export class Home {
 
     load(topic) {
         this._router.navigate(['Doc', { pdf: encodeURIComponent(topic.file), page: topic.page  }]);
+    }
+
+    getCurrentFolder(){
+        return this._fileService.currentFolder;
     }
 }

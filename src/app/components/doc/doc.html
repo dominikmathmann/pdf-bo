@@ -4,16 +4,19 @@
     <div class="col-md-4">
         <table>
             <tr *ngFor="#topic of topics">
-                <td><a (click)=preview(topic.page) class="preview-link"> Seite: {{topic.page}}, {{topic.topic}}</a></td>
+                <td *ngIf="topic.page!=-1"><a (click)=preview(topic.page) class="preview-link"> Seite {{topic.page}}:, {{topic.topic}}</a></td>
+                <td *ngIf="topic.page==-1">{{topic.topic}}</td>
             </tr>
+            <tr><td>&nbsp;</td></tr>
+            <tr *ngIf="getResolutionPDF()"><td> <a (click)=openResolution() class="preview-link"> Lösung </a>  </td></tr>
         </table>
     </div>
 
     <div class="col-md-8 doc-container">
-        <a (click)="nextPage()"><i class="fa fa-chevron-circle-left doc-nav" aria-hidden="true"></i></a>
+        <a (click)="previousPage()"><i class="fa fa-chevron-circle-left doc-nav" aria-hidden="true"></i></a>
         <a (click)="openDocument()">
             <canvas id="doccanvas" width="490px" height="620px"></canvas>
         </a>
-        <a (click)=previousPage()><i class="fa fa-chevron-circle-right doc-nav" aria-hidden="true"></i></a>
+        <a (click)=nextPage()><i class="fa fa-chevron-circle-right doc-nav" aria-hidden="true"></i></a>
     </div>
 </fieldset>

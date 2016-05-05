@@ -2,7 +2,7 @@
 <div class="sidebar">
     <div class="sidebar-wrapper">
         <ul>
-            <li *ngFor="#folder of folders"><a (click)=selectFolder(folder)>{{folder}}</a></li>
+            <li *ngFor="#folder of folders"><a (click)="selectFolder(folder);">{{folder}}</a></li>
         </ul>
 
         <div class="badget" move styleclass="sidebar">
@@ -14,8 +14,8 @@
 <fieldset>
 
     <div class="row">
-        <div class="col-md-8"><h3>{{currentFolder}}</h3></div>
-        <div class="col-md-4"><bo-topic-search folder="{{currentFolder}}" (onResult)="showTopics($event)"></bo-topic-search></div>
+        <div class="col-md-8"><h3>{{getCurrentFolder()}}</h3></div>
+        <div class="col-md-4"><bo-topic-search folder="{{getCurrentFolder()}}" (onResult)="showTopics($event)"></bo-topic-search></div>
     </div>
 
 <div class="row">

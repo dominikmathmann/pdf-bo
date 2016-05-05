@@ -11,6 +11,15 @@ export class FileServiceMock {
     constructor(private _http: Http) { }
 
     rootFolder = "app/assets/pdf/";
+     currentFolder;
+
+    public getCurrentFolder():string{
+        return this.currentFolder;
+    }
+    
+   public getFullPath(file){
+         return file;
+    }
 
     public readPdfFiles(path: string): Observable<string[]> {
         path = this.rootFolder + path;
@@ -41,11 +50,21 @@ export class FileServiceMock {
             .map(txt => {
                 return txt.split("\n")
                     .map(line => {
-                        var splits = line.split("#");
-                        return new Topic(+splits[0], splits[1], pdfFile);
+                  if (line.indexOf("#")!=-1)
+                  {
+                    var splits = line.split("#");
+                    return new Topic(+splits[0], splits[1], pdfFile);
+                  }
+                  else {
+                      return new Topic(-1, line, pdfFile);
+                  }
                     })
 
             })
+    }
+
+    public getResolutionPDF(pdfFile):string {  
+        return pdfFile.replace(".pdf", "_lsg.pdf");
     }
 
     public search(folder: string, searchterm: string): Promise<Topic[]> {
@@ -73,36 +92,6 @@ export class FileServiceMock {
         return Observable.create( (observer) => {
             
         var folders = [
-            "Klasse 5",
-            "Klasse 6",
-            "Klasse 5",
-            "Klasse 6",
-            "Klasse 5",
-            "Klasse 6",
-            "Klasse 5",
-            "Klasse 6",
-            "Klasse 5",
-            "Klasse 6",
-            "Klasse 5",
-            "Klasse 6",
-            "Klasse 5",
-            "Klasse 6",
-            "Klasse 5",
-            "Klasse 6",
-            "Klasse 5",
-            "Klasse 6",
-            "Klasse 5",
-            "Klasse 6",
-            "Klasse 5",
-            "Klasse 6",
-            "Klasse 5",
-            "Klasse 6",
-            "Klasse 5",
-            "Klasse 6",
-            "Klasse 5",
-            "Klasse 6",
-            "Klasse 5",
-            "Klasse 6",
             "Klasse 5",
             "Klasse 6",
         ]

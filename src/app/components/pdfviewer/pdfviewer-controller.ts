@@ -12,7 +12,7 @@ export class PDFViewer{
         this.pdf=_fileService.getFullPath(this.pdf);
         this.page = +_params.get("page");
         navigationService.getBackEvent().subscribe((v:string) => {
-            router.navigate(['Doc', {pdf: encodeURIComponent(this.pdf)}])
+            router.navigate(['Doc', {pdf: encodeURIComponent(this.pdf.replace("_lsg", ""))}])
         });
     }
     

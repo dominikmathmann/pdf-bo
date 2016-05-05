@@ -4,6 +4,7 @@ import {ROUTER_PROVIDERS} from 'angular2/router';
 
 import {AppComponent} from './app/main';
 import {NavigationService} from './app/services/navigation-service';
+import {FileServiceMock} from './app/services/file-service-mock'
 import {FileService} from './app/services/file-service'
 
 //Optional zur Aktivierung der HashLocationStrategy: .../#my/navigation
@@ -14,7 +15,8 @@ bootstrap(AppComponent, [
     HTTP_PROVIDERS,
     ROUTER_PROVIDERS,
     NavigationService,
-    FileService,
+    FileServiceMock,
+    provide(FileService, { useClass: FileService }),
     provide(LocationStrategy, { useClass: HashLocationStrategy })
 ])
     .catch(err => {

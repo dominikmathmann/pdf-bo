@@ -9,6 +9,8 @@ export class TopicSearch {
     constructor(private _fileService:FileService){}
     
     searchterm:string;
+
+    global:boolean;
     
     @Input()
     folder:string;
@@ -23,6 +25,7 @@ export class TopicSearch {
         });
     }
     else{
+        if (this.global) this.folder='';
         this._fileService.search(this.folder, this.searchterm).subscribe(t => this.onResult.emit(t));
         }
     }
